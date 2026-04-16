@@ -17,6 +17,7 @@ def render_ves():
     for y in range(100, 201):
       img.putpixel((x, y), farba)
   return img
+  
 def get_line_pixels(img, A, B):
   pixels = []
   width, height = img.size
