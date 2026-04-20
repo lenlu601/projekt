@@ -8,14 +8,66 @@ def random_color():
   b = randint(0, 255)
   return (r, g, b)
 
-def render_ves():
-  width = 640
-  height = 400
-  img = Image.new('RGB', (width, height), (255,255,255))
-  farba = random_color()
-  for x in range(200, 401):
-    for y in range(100, 201):
-      img.putpixel((x, y), farba)
+def render_ves(ves_source, width):
+  parsed_width = _safe_int(width, 640)
+  commands = _parse_ves_source(ves_source)
+
+  if not commands:
+    fallback_height = max(round(parsed_width * 0.625), 1)
+    return Image.new('RGB', (max(parsed_width, 1), fallback_height), (255, 255, 255))
+
+  _, _, source_width, source_height = commands[0]
+  if source_width <= 0 or source_height <= 0:
+    raise ValueError('Neplatna velkost platna vo VES hlavicke.')
+
+  target_width = max(parsed_width, 1)
+  target_height = max(round(source_height * (target_width / source_width)), 1)
+  img = Image.new('RGB', (target_width, target_height), (255, 255, 255))
+
+  scale_x = target_width / source_width
+  scale_y = target_height / source_height
+
+  for command in commands[1:]:
+    operation = command[0]
+    args = command[1:]
+
+    if operation == "CLEAR":
+      FILL_RECT(img, (0, 0), (target_width, target_height), _parse_color(args[0]))
+    elif operation == "FILL_CIRCLE":
+      center = _scale_point(args[0], args[1], scale_x, scale_y)
+      radius = _scale_scalar(args[2], scale_x, scale_y)
+      FILL_CIRCLE(img, center, radius, _parse_color(args[3]))
+    elif operation == "FILL_RECT":
+      point = _scale_point(args[0], args[1], scale_x, scale_y)
+      size = _scale_size(args[2], args[3], scale_x, scale_y)
+      FILL_RECT(img, point, size, _parse_color(args[4]))
+    elif operation == "FILL_TRIANGLE":
+      a = _scale_point(args[0], args[1], scale_x, scale_y)
+      b = _scale_point(args[2], args[3], scale_x, scale_y)
+      c = _scale_point(args[4], args[5], scale_x, scale_y)
+      FILL_TRIANGLE(img, a, b, c, _parse_color(args[6]))
+    elif operation == "CIRCLE":
+      center = _scale_point(args[0], args[1], scale_x, scale_y)
+      radius = _scale_scalar(args[2], scale_x, scale_y)
+      thickness = max(_safe_int(args[3], 1), 1)
+      CIRCLE(img, center, radius, thickness, _parse_color(args[4]))
+    elif operation == "RECT":
+      point = _scale_point(args[0], args[1], scale_x, scale_y)
+      size = _scale_size(args[2], args[3], scale_x, scale_y)
+      thickness = max(_safe_int(args[4], 1), 1)
+      RECT(img, point, size, thickness, _parse_color(args[5]))
+    elif operation == "TRIANGLE":
+      a = _scale_point(args[0], args[1], scale_x, scale_y)
+      b = _scale_point(args[2], args[3], scale_x, scale_y)
+      c = _scale_point(args[4], args[5], scale_x, scale_y)
+      thickness = max(_safe_int(args[6], 1), 1)
+      TRIANGLE(img, a, b, c, thickness, _parse_color(args[7]))
+    elif operation == "LINE":
+      a = _scale_point(args[0], args[1], scale_x, scale_y)
+      b = _scale_point(args[2], args[3], scale_x, scale_y)
+      thickness = max(_safe_int(args[4], 1), 1)
+      LINE(img, a, b, thickness, _parse_color(args[5]))
+
   return img
   
 def get_line_pixels(img, A, B):
@@ -264,6 +316,70 @@ def hex2dec_color(color):
   g = color[3:5]
   b = color[5:]
   return hex2dec(r), hex2dec(g), hex2dec(b)
+
+def _safe_int(value, default):
+  try:
+    return int(value)
+  except (TypeError, ValueError):
+    return default
+
+def _parse_ves_source(ves_source):
+  if ves_source is None:
+    raise ValueError("VES subor chyba.")
+
+  commands = []
+  lines = [line.strip() for line in ves_source.splitlines() if line.strip()]
+
+  if not lines:
+    return commands
+
+  header = lines[0].split()
+  if len(header) != 4 or header[0] != "VES" or header[1] != "v1.0":
+    raise ValueError("VES subor musi zacinat hlavickou: VES v1.0 sirka vyska")
+
+  try:
+    commands.append(("VES", "v1.0", int(header[2]), int(header[3])))
+  except ValueError as error:
+    raise ValueError("Sirka a vyska vo VES hlavicke musia byt cisla.") from error
+
+  command_specs = {
+    "CLEAR": 1,
+    "FILL_CIRCLE": 4,
+    "FILL_RECT": 5,
+    "FILL_TRIANGLE": 7,
+    "CIRCLE": 5,
+    "RECT": 6,
+    "TRIANGLE": 8,
+    "LINE": 6,
+  }
+
+  for line in lines[1:]:
+    parts = line.split()
+    operation = parts[0]
+    expected_args = command_specs.get(operation)
+
+    if expected_args is None:
+      raise ValueError(f"Nepodporovany prikaz: {operation}")
+    if len(parts) != expected_args + 1:
+      raise ValueError(f"Prikaz {operation} ma zly pocet argumentov.")
+
+    commands.append(tuple(parts))
+
+  return commands
+
+def _scale_point(x, y, scale_x, scale_y):
+  return (round(int(x) * scale_x), round(int(y) * scale_y))
+
+def _scale_size(width, height, scale_x, scale_y):
+  return (round(int(width) * scale_x), round(int(height) * scale_y))
+
+def _scale_scalar(value, scale_x, scale_y):
+  return max(round(int(value) * ((scale_x + scale_y) / 2)), 1)
+
+def _parse_color(value):
+  if not isinstance(value, str) or len(value) != 7 or not value.startswith("#"):
+    raise ValueError(f"Neplatna farba: {value}")
+  return hex2dec_color(value.upper())
 def load_file_content(file):
   pole = []
   with open(file, "r") as f:
