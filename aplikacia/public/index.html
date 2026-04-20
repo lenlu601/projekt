@@ -1,19 +1,51 @@
 <!DOCTYPE html>
 <html>
+
 <head>
 	<title>Vector Script GUI</title>
 	<link rel="stylesheet" type="text/css" href="style.css">
 </head>
+
 <body>
-<section>
-	<form method="POST" action="/render">
-		<button>Zobraziť</button>
-		<textarea name="ves"></textarea>
-	</form>
-</section>
-<section>
-	<img id="output" />
-</section>
-<script type="text/javascript" src="script.js" ></script>
+	<section>
+		<form method="POST" action="/render">
+			<button>Zobraziť</button>
+			<div style="margin: 10px 0; padding: 10px; border: 1px solid #ccc;">
+				<button type="button" onclick="pridajText('rect(colour, length, width)')">Pridať RECT</button>
+				<button type="button" onclick="pridajText('circle(colour, radius)')">Pridať CIRCLE</button>
+			</div>
+
+			<textarea id="mojEditor" rows="10" style="width: 100%;" placeholder="Tu sa objaví kód..."></textarea>
+
+			<script>
+				function pridajText(obsah) {
+					// Získame element podľa ID
+					var pole = document.getElementById('mojEditor');
+
+					if (!pole) {
+						console.error("Chyba: Element s id 'mojEditor' nebol nájdený!");
+						return;
+					}
+
+					var start = pole.selectionStart;
+					var koniec = pole.selectionEnd;
+					var staryText = pole.value;
+
+					// Vložíme text na pozíciu kurzora
+					pole.value = staryText.substring(0, start) + obsah + staryText.substring(koniec);
+
+					// Vrátime kurzor na správne miesto
+					pole.focus();
+					pole.selectionStart = pole.selectionEnd = start + obsah.length;
+				}
+			</script>
+			<textarea id="editor" name="ves"></textarea>
+		</form>
+	</section>
+	<section>
+		<img id="output" />
+	</section>
+	<script type="text/javascript" src="script.js"></script>
 </body>
+
 </html>

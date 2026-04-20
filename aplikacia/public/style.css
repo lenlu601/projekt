@@ -2,17 +2,42 @@
 	margin: 0;
 	padding: 0;
 }
+
 body {
 	display: flex;
 }
-body > section {
+
+body>section {
 	flex-basis: 50%;
 }
+
 textarea {
 	width: 100%;
 	height: 90vh;
 }
+
 img {
 	width: 100%;
 	height: auto;
+}
+
+.toolbar {
+	background: #f0f0f0;
+	padding: 10px;
+	border: 1px solid #ccc;
+	border-bottom: none;
+	/* Aby to pekne nadväzovalo na textové pole */
+	display: flex;
+	gap: 5px;
+}
+
+.toolbar button {
+	cursor: pointer;
+	padding: 5px 10px;
+	background: white;
+	border: 1px solid #999;
+}
+
+.toolbar button:hover {
+	background: #e0e0e0;
 }
