@@ -1,21 +1,75 @@
-// handleSubmit je funkcia, ktorá sa spustí keď sa bude mať odoslať náš formulár
-function handleSubmit(e) {
-	e.preventDefault(); // zabrániť vstavenému odosielaniu v prehliadači
+const form = document.querySelector("#renderForm");
+const textarea = document.querySelector("#vesInput");
+const outputImage = document.querySelector("#output");
+const statusMessage = document.querySelector("#statusMessage");
+let currentImageUrl = null;
 
-	// this reprezentuje ten formular, ktory odosielame
-	const ves = this.querySelector("textarea").value; // Načítame text z textarea
-	const width = document.querySelector("section:nth-child(2)").clientWidth; // Načítame aktuálnu šírku výstupného okna
+async function handleSubmit(event) {
+  event.preventDefault();
 
-	const formular = new URLSearchParams(); // Vytvoríme štruktúru, ktorá bude reprezentovať formulár
-	formular.append('ves', ves); // Pridáme tam naše hodnoty
-	formular.append('width', width);
+  const ves = textarea.value.trim();
+  if (!ves) {
+    statusMessage.textContent = "Najprv vložte alebo vyberte obsah VES súboru.";
+    outputImage.style.display = "none";
+    return;
+  }
 
-	const url = this.action; // Nacitame povodnu URL zadanu vo formulari
-	const method = this.method; // NAcitame povodnu metodu zadanu vo formulari
-	fetch(url, {method: method, body: formular}) // Urobíme HTTP požiadavku na náš server POST /render a formularom v tele požiadavky 
-		.then((res) => res.blob()) // Dostali sme binárne dáta (blob)
-		.then((image) => {
-			document.querySelector("#output").src = URL.createObjectURL(image); // Nastavíme src našeho <img> na načítaný obrázok
-		})
+  const previewWidth = Math.max(
+    Math.round(document.querySelector(".image-frame").clientWidth - 24),
+    200
+  );
+
+  const formData = new URLSearchParams();
+  formData.append("ves", ves);
+  formData.append("width", previewWidth);
+
+  statusMessage.textContent = "Renderujem obrázok...";
+
+  try {
+    const response = await fetch(form.action, {
+      method: form.method,
+      body: formData
+    });
+
+    if (!response.ok) {
+      const message = await response.text();
+      throw new Error(message || "Nepodarilo sa vyrenderovať obrázok.");
+    }
+
+    const image = await response.blob();
+    if (currentImageUrl) {
+      URL.revokeObjectURL(currentImageUrl);
+    }
+
+    currentImageUrl = URL.createObjectURL(image);
+    outputImage.src = currentImageUrl;
+    outputImage.style.display = "block";
+    statusMessage.textContent = "Obrázok bol úspešne vyrenderovaný.";
+  } catch (error) {
+    outputImage.style.display = "none";
+    statusMessage.textContent = error.message;
+  }
 }
-document.querySelector("form").addEventListener("submit", handleSubmit); // Nastavíme formulár, aby pri submit udalosti spustil našu handleSubmit funkciu
+
+async function loadSample(name) {
+  statusMessage.textContent = `Načítavam ukážku ${name.toUpperCase()}...`;
+
+  try {
+    const response = await fetch(`/sample/${name}`);
+    if (!response.ok) {
+      const message = await response.text();
+      throw new Error(message || "Ukážku sa nepodarilo načítať.");
+    }
+
+    textarea.value = await response.text();
+    statusMessage.textContent = `Ukážka ${name.toUpperCase()} je pripravená na zobrazenie.`;
+  } catch (error) {
+    statusMessage.textContent = error.message;
+  }
+}
+
+form.addEventListener("submit", handleSubmit);
+
+document.querySelectorAll(".sample").forEach((button) => {
+  button.addEventListener("click", () => loadSample(button.dataset.sample));
+});

@@ -1,19 +1,48 @@
 <!DOCTYPE html>
-<html>
+<html lang="sk">
 <head>
-	<title>Vector Script GUI</title>
-	<link rel="stylesheet" type="text/css" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VES Renderer</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<section>
-	<form method="POST" action="/render">
-		<button>Zobraziť</button>
-		<textarea name="ves"></textarea>
-	</form>
-</section>
-<section>
-	<img id="output" />
-</section>
-<script type="text/javascript" src="script.js" ></script>
+  <main class="layout">
+    <section class="editor-panel">
+      <div class="panel-card">
+        <h1>VES Renderer</h1>
+        <p class="intro">Vložte obsah `.ves` súboru, stlačte tlačidlo a výsledný obrázok sa zobrazí vedľa.</p>
+
+        <form id="renderForm" method="POST" action="/render">
+          <label for="vesInput">Obsah VES súboru</label>
+          <textarea name="ves" id="vesInput" placeholder="Sem vložte obsah .ves súboru"></textarea>
+          <button type="submit">Zobraziť obrázok</button>
+        </form>
+      </div>
+    </section>
+
+    <section class="preview-panel">
+      <div class="panel-card preview-card">
+        <div class="preview-header">
+          <h2>Výsledok</h2>
+          <p id="statusMessage">Zatiaľ nie je zobrazený žiadny obrázok.</p>
+        </div>
+        <div class="image-frame">
+          <img id="output" alt="Vyrenderovaný VES obrázok">
+        </div>
+      </div>
+    </section>
+
+    <aside class="samples-panel">
+      <div class="panel-card">
+        <h2>Skúste si tieto obrázky:</h2>
+        <button type="button" class="sample" data-sample="vianoce">VIANOCE</button>
+        <button type="button" class="sample" data-sample="zatisie">ZÁTIŠIE</button>
+        <button type="button" class="sample" data-sample="zralok">ŽRALOK</button>
+      </div>
+    </aside>
+  </main>
+
+  <script src="script.js"></script>
 </body>
 </html>
