@@ -1,10 +1,15 @@
 from io import BytesIO
 from pathlib import Path
-from flask import Flask, send_file, request, send_from_directory
+
+from flask import Flask, abort, request, send_file, send_from_directory
+
 from ves import render_ves
+
 app = Flask(__name__)
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
-PUBLIC_DIR = Path(__file__).resolve().parent.parent / 'public'
+BASE_DIR = Path(__file__).resolve().parent.parent
+PUBLIC_DIR = BASE_DIR / 'public'
+SAMPLES_DIR = PUBLIC_DIR / 'samples'
 
 
 def serve_pil_image(img):
@@ -16,6 +21,15 @@ def serve_pil_image(img):
   img_io.seek(0)
   return send_file(img_io, mimetype='image/png')
 
+
+
+@app.route('/sample/<name>')
+def sample(name):
+  sample_file = SAMPLES_DIR / f'{name}.txt'
+  if not sample_file.is_file():
+    abort(404, description='Pozadovana ukazka neexistuje.')
+
+  return send_from_directory(SAMPLES_DIR, sample_file.name, mimetype='text/plain')
 
 
 @app.route('/', defaults={'path': ''})
@@ -37,8 +51,13 @@ def render():
   """
   ves = request.form.get('ves', '') # nacitanie hodnoty ktoru sme dostali v poziadavke
   width = request.form.get('width', 640) # nacitanie hodnoty ktoru sme dostali v poziadavke
-  img = render_ves(ves, width)
-  return serve_pil_image(img) # vratime vyrenderovany obrazok ako jpg
+
+  try:
+    img = render_ves(ves, width)
+  except ValueError as error:
+    return str(error), 400
+
+  return serve_pil_image(img) # vratime vyrenderovany obrazok ako png
 
 
 if __name__ == '__main__':

@@ -1,36 +1,61 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="sk">
 <head>
-	<title>Vector Script GUI</title>
-	<link rel="stylesheet" type="text/css" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VES Renderer</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
-	<section>
-		<form method="POST" action="/render">
-			<button>Zobraziť</button>
-			<div class="toolbar">
-				<button type="button" onclick="pridajText('CLEAR #FFFFFF\n')">CLEAR</button>
-				<button type="button" onclick="pridajText('FILL_CIRCLE 150 150 50 #00FF00\n')">FILL_CIRCLE</button>
-				<button type="button" onclick="pridajText('FILL_RECT 50 50 200 100 #FF0000\n')">FILL_RECT</button>
-				<button type="button"
+  <main class="layout">
+    <section class="editor-panel">
+      <div class="panel-card">
+        <h1>VES Renderer</h1>
+        <div class="toolbar">
+				  <button type="button" onclick="pridajText('CLEAR #FFFFFF\n')">CLEAR</button>
+				  <button type="button" onclick="pridajText('FILL_CIRCLE 150 150 50 #00FF00\n')">FILL_CIRCLE</button>
+				  <button type="button" onclick="pridajText('FILL_RECT 50 50 200 100 #FF0000\n')">FILL_RECT</button>
+				  <button type="button"
 					onclick="pridajText('FILL_TRIANGLE 100 100 200 100 150 200 #0000FF\n')">FILL_TRIANGLE</button>
-				<button type="button" onclick="pridajText('CIRCLE 300 150 50 3 #00FF00\n')">CIRCLE</button>
-				<button type="button" onclick="pridajText('RECT 300 50 200 100 5 #FF0000\n')">RECT</button>
-				<button type="button"
+				  <button type="button" onclick="pridajText('CIRCLE 300 150 50 3 #00FF00\n')">CIRCLE</button>
+				  <button type="button" onclick="pridajText('RECT 300 50 200 100 5 #FF0000\n')">RECT</button>
+				  <button type="button"
 					onclick="pridajText('TRIANGLE 300 250 400 250 350 350 3 #0000FF\n')">TRIANGLE</button>
-				<button type="button" onclick="pridajText('LINE 50 300 250 300 4 #000000\n')">LINE</button>
+				  <button type="button" onclick="pridajText('LINE 50 300 250 300 4 #000000\n')">LINE</button>
 			</div>
-			<textarea name="ves" id="mojEditor" placeholder="Tu sa objaví kód...">VES v1.0 640 480
-CLEAR #FFFFFF
-</textarea>
-		</form>
-	</section>
-	<section>
-		<img id="output" />
-	</section>
-	<script type="text/javascript" src="script.js"></script>
-</body>
+        <p class="intro">Vložte obsah `.ves` súboru, stlačte tlačidlo a výsledný obrázok sa zobrazí vedľa.</p>
 
+        <form id="renderForm" method="POST" action="/render">
+          <label for="vesInput">Obsah VES súboru</label>
+          <textarea name="ves" id="vesInput" placeholder="Sem vložte obsah .ves súboru"></textarea>
+          <button type="submit">Zobraziť obrázok</button>
+        </form>
+      </div>
+    </section>
+
+    <section class="preview-panel">
+      <div class="panel-card preview-card">
+        <div class="preview-header">
+          <h2>Výsledok</h2>
+          <p id="statusMessage">Zatiaľ nie je zobrazený žiadny obrázok.</p>
+        </div>
+        <div class="image-frame">
+          <img id="output" alt="Vyrenderovaný VES obrázok">
+        </div>
+      </div>
+    </section>
+
+    <aside class="samples-panel">
+      <div class="panel-card">
+        <h2>Skúste si tieto obrázky:</h2>
+        <button type="button" class="sample" data-sample="vianoce">VIANOCE</button>
+        <button type="button" class="sample" data-sample="zatisie">ZÁTIŠIE</button>
+        <button type="button" class="sample" data-sample="zralok">ŽRALOK</button>
+      </div>
+    </aside>
+  </main>
+
+  <script src="script.js"></script>
+</body>
 </html>

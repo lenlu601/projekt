@@ -9,122 +9,154 @@
 }
 
 * {
-	box-sizing: border-box;
-	margin: 0;
-	padding: 0;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
 body {
-	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-	background-color: var(--bg-primary);
-	color: var(--text-primary);
-	display: flex;
-	flex-direction: row;
-	height: 100vh;
-	overflow: hidden;
+  min-height: 100vh;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, #eef4ff 0%, #f8fbff 45%, #fff6ea 100%);
+  color: #1b2a41;
 }
 
-/* Prvá sekcia = Editor */
-body>section:first-child {
-	flex: 1;
-	max-width: 50%;
-	display: flex;
-	flex-direction: column;
-	border-right: 1px solid var(--border);
-	background-color: var(--bg-secondary);
+.layout {
+  display: grid;
+  grid-template-columns: minmax(320px, 1.2fr) minmax(320px, 1fr) 280px;
+  gap: 24px;
+  padding: 24px;
+  align-items: start;
 }
 
-/* Druhá sekcia = Výstup */
-body>section:last-child {
-	flex: 1;
-	background: radial-gradient(circle at center, #1a1a24 0%, #121212 100%);
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	padding: 30px;
+.panel-card {
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid rgba(27, 42, 65, 0.08);
+  border-radius: 20px;
+  box-shadow: 0 18px 45px rgba(27, 42, 65, 0.12);
+  padding: 24px;
+}
+
+.editor-panel h1,
+.preview-panel h2,
+.samples-panel h2 {
+  margin-bottom: 12px;
+}
+
+.intro,
+#statusMessage {
+  color: #5c6b80;
+  line-height: 1.5;
 }
 
 form {
-	display: flex;
-	flex-direction: column;
-	height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-top: 20px;
 }
 
-/* Skrytie starých tlačidiel pre zobrazenie (ako si chcel, nechcem aby tam boli) */
-form>button:first-of-type,
-.bottom-bar {
-	display: none !important;
+label {
+  font-weight: 600;
 }
 
-/* Toolbar */
-.toolbar {
-	padding: 15px 20px;
-	display: flex;
-	gap: 10px;
-	flex-wrap: wrap;
-	background: rgba(45, 45, 45, 0.4);
-	border-bottom: 1px solid var(--border);
+textarea {
+  width: 100%;
+  min-height: 68vh;
+  resize: vertical;
+  border: 1px solid #cfd8e3;
+  border-radius: 14px;
+  padding: 16px;
+  font-family: Consolas, "Courier New", monospace;
+  font-size: 14px;
+  line-height: 1.5;
+  background: #fbfdff;
 }
 
-.toolbar button {
-	background-color: var(--bg-tertiary);
-	color: var(--text-primary);
-	border: 1px solid var(--border);
-	padding: 8px 14px;
-	border-radius: 6px;
-	font-size: 13px;
-	font-weight: 500;
-	cursor: pointer;
-	transition: all 0.2s ease;
+button {
+  border: none;
+  border-radius: 14px;
+  padding: 14px 18px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.18s ease, box-shadow 0.18s ease, background-color 0.18s ease;
 }
 
-.toolbar button:hover {
-	background-color: var(--accent);
-	border-color: var(--accent-hover);
-	transform: translateY(-2px);
-	box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+form button {
+  background: #0f6dff;
+  color: #ffffff;
 }
 
-/* Textarea editor */
-textarea#mojEditor {
-	flex: 1;
-	background-color: transparent;
-	color: #f8f8f2;
-	border: none;
-	padding: 20px;
-	font-family: 'Consolas', 'Monaco', monospace;
-	font-size: 16px;
-	line-height: 1.6;
-	resize: none;
-	outline: none;
+form button:hover,
+.sample:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 22px rgba(15, 109, 255, 0.18);
 }
 
-/* Obrázok */
-img#output {
-	max-width: 100%;
-	max-height: 100%;
-	object-fit: contain;
-	border-radius: 12px;
-	box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
-	background-color: white;
-	/* Keďže farby útvarov rátajú s bielym pozadím */
+.preview-card {
+  min-height: calc(100vh - 48px);
 }
 
-/* Vlastný posuvník */
-::-webkit-scrollbar {
-	width: 10px;
-	height: 10px;
+.preview-header {
+  margin-bottom: 16px;
 }
 
-::-webkit-scrollbar-track {
-	background: var(--bg-primary);
+.image-frame {
+  min-height: 75vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px dashed #d7e0eb;
+  border-radius: 18px;
+  background: linear-gradient(180deg, #ffffff 0%, #f6f9fc 100%);
+  overflow: hidden;
+  padding: 12px;
 }
 
-::-webkit-scrollbar-thumb {
-	background: #444;
-	border-radius: 5px;
+img {
+  display: none;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  border-radius: 10px;
 }
 
-::-webkit-scrollbar-thumb:hover {
-	background: #555;
+.samples-panel .panel-card {
+  position: sticky;
+  top: 24px;
+}
+
+.samples-panel h2 {
+  margin-bottom: 16px;
+}
+
+.sample {
+  width: 100%;
+  margin-bottom: 12px;
+  background: #e8f0ff;
+  color: #0c3d91;
+}
+
+.sample:last-child {
+  margin-bottom: 0;
+}
+
+@media (max-width: 1100px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+
+  .preview-card {
+    min-height: auto;
+  }
+
+  .samples-panel .panel-card {
+    position: static;
+  }
+
+  textarea,
+  .image-frame {
+    min-height: 420px;
+  }
 }
