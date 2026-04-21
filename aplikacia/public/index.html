@@ -6,11 +6,24 @@
   <title>VES Renderer</title>
   <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
   <main class="layout">
     <section class="editor-panel">
       <div class="panel-card">
         <h1>VES Renderer</h1>
+        <div class="toolbar">
+				  <button type="button" onclick="pridajText('CLEAR #FFFFFF\n')">CLEAR</button>
+				  <button type="button" onclick="pridajText('FILL_CIRCLE 150 150 50 #00FF00\n')">FILL_CIRCLE</button>
+				  <button type="button" onclick="pridajText('FILL_RECT 50 50 200 100 #FF0000\n')">FILL_RECT</button>
+				  <button type="button"
+					onclick="pridajText('FILL_TRIANGLE 100 100 200 100 150 200 #0000FF\n')">FILL_TRIANGLE</button>
+				  <button type="button" onclick="pridajText('CIRCLE 300 150 50 3 #00FF00\n')">CIRCLE</button>
+				  <button type="button" onclick="pridajText('RECT 300 50 200 100 5 #FF0000\n')">RECT</button>
+				  <button type="button"
+					onclick="pridajText('TRIANGLE 300 250 400 250 350 350 3 #0000FF\n')">TRIANGLE</button>
+				  <button type="button" onclick="pridajText('LINE 50 300 250 300 4 #000000\n')">LINE</button>
+			</div>
         <p class="intro">Vložte obsah `.ves` súboru, stlačte tlačidlo a výsledný obrázok sa zobrazí vedľa.</p>
 
         <form id="renderForm" method="POST" action="/render">
