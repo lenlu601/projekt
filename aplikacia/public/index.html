@@ -11,11 +11,57 @@
     <section class="editor-panel">
       <div class="panel-card">
         <h1>VES Renderer</h1>
-        <p class="intro">Vložte obsah `.ves` súboru, stlačte tlačidlo a výsledný obrázok sa zobrazí vedľa.</p>
+        <p class="intro">Vlož obsah `.ves` súboru, stlač tlačidlo a výsledný obrázok sa zobrazí vedľa.</p>
+
+        <section class="command-legend" aria-labelledby="legendTitle">
+          <div class="legend-header">
+            <h2 id="legendTitle">Legenda príkazov</h2>
+            <p>Klikni na príkaz a jeho šablóna sa doplní do editora.</p>
+          </div>
+          <div class="legend-grid">
+            <button type="button" class="command-chip" data-command="VES v1.0 800 600" data-description="Hlavička súboru s veľkosťou plátna.">
+              <strong>VES HEADER</strong>
+              <span>VES v1.0 800 600</span>
+            </button>
+            <button type="button" class="command-chip" data-command="CLEAR #FFFFFF" data-description="Vyplní celé plátno jednou farbou.">
+              <strong>CLEAR</strong>
+              <span>CLEAR #FFFFFF</span>
+            </button>
+            <button type="button" class="command-chip" data-command="FILL_RECT 50 50 200 120 #FF8800" data-description="Vyplnený obdĺžnik.">
+              <strong>RECTANGLE</strong>
+              <span>FILL_RECT 50 50 200 120 #FF8800</span>
+            </button>
+            <button type="button" class="command-chip" data-command="RECT 50 50 200 120 3 #222222" data-description="Obrys obdĺžnika.">
+              <strong>RECT</strong>
+              <span>RECT 50 50 200 120 3 #222222</span>
+            </button>
+            <button type="button" class="command-chip" data-command="FILL_CIRCLE 200 200 60 #00AAFF" data-description="Vyplnený kruh.">
+              <strong>FILL CIRCLE</strong>
+              <span>FILL_CIRCLE 200 200 60 #00AAFF</span>
+            </button>
+            <button type="button" class="command-chip" data-command="CIRCLE 200 200 60 3 #003366" data-description="Obrys kruhu.">
+              <strong>CIRCLE</strong>
+              <span>CIRCLE 200 200 60 3 #003366</span>
+            </button>
+            <button type="button" class="command-chip" data-command="FILL_TRIANGLE 100 300 220 120 340 300 #66CC66" data-description="Vyplnený trojuholník.">
+              <strong>FILL TRIANGLE</strong>
+              <span>FILL_TRIANGLE 100 300 220 120 340 300 #66CC66</span>
+            </button>
+            <button type="button" class="command-chip" data-command="TRIANGLE 100 300 220 120 340 300 3 #225522" data-description="Obrys trojuholníka.">
+              <strong>TRIANGLE</strong>
+              <span>TRIANGLE 100 300 220 120 340 300 3 #225522</span>
+            </button>
+            <button type="button" class="command-chip" data-command="LINE 40 40 300 180 3 #111111" data-description="Čiara medzi dvoma bodmi.">
+              <strong>LINE</strong>
+              <span>LINE 40 40 300 180 3 #111111</span>
+            </button>
+          </div>
+          <p id="commandHelp" class="legend-help">Vyber príkaz a doplnia sa jeho argumenty.</p>
+        </section>
 
         <form id="renderForm" method="POST" action="/render">
           <label for="vesInput">Obsah VES súboru</label>
-          <textarea name="ves" id="vesInput" placeholder="Sem vložte obsah .ves súboru"></textarea>
+          <textarea name="ves" id="vesInput" placeholder="Sem vlož obsah .ves súboru"></textarea>
           <button type="submit">Zobraziť obrázok</button>
         </form>
       </div>
@@ -37,8 +83,8 @@
       <div class="panel-card">
         <h2>Skúste si tieto obrázky:</h2>
         <button type="button" class="sample" data-sample="vianoce">VIANOCE</button>
-        <button type="button" class="sample" data-sample="zatisie">ZÁTIŠIE</button>
-        <button type="button" class="sample" data-sample="zralok">ŽRALOK</button>
+        <button type="button" class="sample" data-sample="zatisie">ZATISIE</button>
+        <button type="button" class="sample" data-sample="zralok">ZRALOK</button>
       </div>
     </aside>
   </main>

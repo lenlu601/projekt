@@ -1,13 +1,22 @@
 from io import BytesIO
 from pathlib import Path
+import sys
+
+BASE_DIR = Path(__file__).resolve().parent.parent
+PACKAGES_DIR = BASE_DIR / '.packages'
+
+if PACKAGES_DIR.is_dir():
+  sys.path.insert(0, str(PACKAGES_DIR))
 
 from flask import Flask, abort, request, send_file, send_from_directory
 
-from ves import render_ves
+try:
+  from .ves import render_ves
+except ImportError:
+  from ves import render_ves
 
 app = Flask(__name__)
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
-BASE_DIR = Path(__file__).resolve().parent.parent
 PUBLIC_DIR = BASE_DIR / 'public'
 SAMPLES_DIR = PUBLIC_DIR / 'samples'
 
