@@ -208,7 +208,7 @@ async function handleSubmit(event) {
     currentImageUrl = URL.createObjectURL(image);
     outputImage.src = currentImageUrl;
     outputImage.style.display = "block";
-    statusMessage.textContent = "Obrazok bol uspesne vyrenderovany.";
+    statusMessage.textContent = "Obrázok bol úspešne vyrenderovaný.";
   } catch (error) {
     outputImage.style.display = "none";
     statusMessage.textContent = error.message || "Nastala chyba pri renderovani.";
