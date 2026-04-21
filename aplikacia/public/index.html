@@ -10,36 +10,21 @@
 	<section>
 		<form method="POST" action="/render">
 			<button>Zobraziť</button>
-			<div style="margin: 10px 0; padding: 10px; border: 1px solid #ccc;">
-				<button type="button" onclick="pridajText('rect(colour, length, width)')">Pridať RECT</button>
-				<button type="button" onclick="pridajText('circle(colour, radius)')">Pridať CIRCLE</button>
+			<div class="toolbar">
+				<button type="button" onclick="pridajText('CLEAR #FFFFFF\n')">CLEAR</button>
+				<button type="button" onclick="pridajText('FILL_CIRCLE 150 150 50 #00FF00\n')">FILL_CIRCLE</button>
+				<button type="button" onclick="pridajText('FILL_RECT 50 50 200 100 #FF0000\n')">FILL_RECT</button>
+				<button type="button"
+					onclick="pridajText('FILL_TRIANGLE 100 100 200 100 150 200 #0000FF\n')">FILL_TRIANGLE</button>
+				<button type="button" onclick="pridajText('CIRCLE 300 150 50 3 #00FF00\n')">CIRCLE</button>
+				<button type="button" onclick="pridajText('RECT 300 50 200 100 5 #FF0000\n')">RECT</button>
+				<button type="button"
+					onclick="pridajText('TRIANGLE 300 250 400 250 350 350 3 #0000FF\n')">TRIANGLE</button>
+				<button type="button" onclick="pridajText('LINE 50 300 250 300 4 #000000\n')">LINE</button>
 			</div>
-
-			<textarea id="mojEditor" rows="10" style="width: 100%;" placeholder="Tu sa objaví kód..."></textarea>
-
-			<script>
-				function pridajText(obsah) {
-					// Získame element podľa ID
-					var pole = document.getElementById('mojEditor');
-
-					if (!pole) {
-						console.error("Chyba: Element s id 'mojEditor' nebol nájdený!");
-						return;
-					}
-
-					var start = pole.selectionStart;
-					var koniec = pole.selectionEnd;
-					var staryText = pole.value;
-
-					// Vložíme text na pozíciu kurzora
-					pole.value = staryText.substring(0, start) + obsah + staryText.substring(koniec);
-
-					// Vrátime kurzor na správne miesto
-					pole.focus();
-					pole.selectionStart = pole.selectionEnd = start + obsah.length;
-				}
-			</script>
-			<textarea id="editor" name="ves"></textarea>
+			<textarea name="ves" id="mojEditor" placeholder="Tu sa objaví kód...">VES v1.0 640 480
+CLEAR #FFFFFF
+</textarea>
 		</form>
 	</section>
 	<section>
