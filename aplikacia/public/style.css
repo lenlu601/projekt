@@ -49,6 +49,60 @@ body {
   line-height: 1.5;
 }
 
+.command-legend {
+  margin-top: 20px;
+  padding: 18px;
+  border: 1px solid #d9e2ef;
+  border-radius: 18px;
+  background: linear-gradient(180deg, #f9fbff 0%, #eef5ff 100%);
+}
+
+.legend-header h2 {
+  margin-bottom: 6px;
+  font-size: 1rem;
+}
+
+.legend-header p,
+.legend-help {
+  color: #5c6b80;
+  line-height: 1.5;
+  font-size: 0.95rem;
+}
+
+.legend-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin: 16px 0 12px;
+}
+
+.command-chip {
+  text-align: left;
+  border: 1px solid #cfe0ff;
+  background: #ffffff;
+  color: #16345f;
+  padding: 14px;
+  border-radius: 14px;
+  box-shadow: 0 6px 16px rgba(15, 109, 255, 0.08);
+}
+
+.command-chip strong,
+.command-chip span {
+  display: block;
+}
+
+.command-chip strong {
+  margin-bottom: 6px;
+  font-size: 0.88rem;
+  letter-spacing: 0.04em;
+}
+
+.command-chip span {
+  font-family: Consolas, "Courier New", monospace;
+  font-size: 0.82rem;
+  word-break: break-word;
+}
+
 form {
   display: flex;
   flex-direction: column;
@@ -89,7 +143,8 @@ form button {
 }
 
 form button:hover,
-.sample:hover {
+.sample:hover,
+.command-chip:hover {
   transform: translateY(-1px);
   box-shadow: 0 10px 22px rgba(15, 109, 255, 0.18);
 }
@@ -158,5 +213,9 @@ img {
   textarea,
   .image-frame {
     min-height: 420px;
+  }
+
+  .legend-grid {
+    grid-template-columns: 1fr;
   }
 }
