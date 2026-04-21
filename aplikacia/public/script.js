@@ -164,6 +164,7 @@ const form = document.querySelector("#renderForm");
 const textarea = document.querySelector("#vesInput");
 const outputImage = document.querySelector("#output");
 const statusMessage = document.querySelector("#statusMessage");
+const commandHelp = document.querySelector("#commandHelp");
 let currentImageUrl = null;
 
 async function handleSubmit(event) {
@@ -173,7 +174,7 @@ async function handleSubmit(event) {
 
   const ves = textarea.value.trim();
   if (!ves) {
-    statusMessage.textContent = "Najprv vlozte alebo vyberte obsah VES suboru.";
+    statusMessage.textContent = "Najprv vlož alebo vyber obsah VES súboru.";
     outputImage.style.display = "none";
     return;
   }
@@ -187,7 +188,7 @@ async function handleSubmit(event) {
   formData.append("ves", ves);
   formData.append("width", previewWidth);
 
-  statusMessage.textContent = "Renderujem obrazok...";
+  statusMessage.textContent = "Renderujem obrázok...";
 
   try {
     const response = await fetch(form.action, {
@@ -197,7 +198,7 @@ async function handleSubmit(event) {
 
     if (!response.ok) {
       const message = await response.text();
-      throw new Error(message || "Nepodarilo sa vyrenderovat obrazok.");
+      throw new Error(message || "Nepodarilo sa vyrenderovať obrázok.");
     }
 
     const image = await response.blob();
@@ -211,7 +212,7 @@ async function handleSubmit(event) {
     statusMessage.textContent = "Obrázok bol úspešne vyrenderovaný.";
   } catch (error) {
     outputImage.style.display = "none";
-    statusMessage.textContent = error.message || "Nastala chyba pri renderovani.";
+    statusMessage.textContent = error.message || "Nastala chyba pri renderovaní.";
   }
 }
 
@@ -219,13 +220,31 @@ function loadSample(name) {
   const sampleContent = SAMPLE_CONTENTS[name];
 
   if (!sampleContent) {
-    statusMessage.textContent = "Tato ukazka neexistuje.";
+    statusMessage.textContent = "Táto ukážka neexistuje.";
     return;
   }
 
   textarea.value = sampleContent;
-  statusMessage.textContent = `Ukazka ${name.toUpperCase()} je nacitana.`;
+  statusMessage.textContent = `Ukážka ${name.toUpperCase()} je načítaná.`;
   handleSubmit();
+}
+
+function insertCommand(command, description) {
+  const normalizedCommand = command.trim();
+  const currentValue = textarea.value.trimEnd();
+  const nextValue = currentValue
+    ? `${currentValue}\n${normalizedCommand}`
+    : normalizedCommand;
+
+  textarea.value = nextValue;
+  textarea.focus();
+  textarea.setSelectionRange(textarea.value.length, textarea.value.length);
+
+  if (description) {
+    commandHelp.textContent = description;
+  }
+
+  statusMessage.textContent = `Príkaz ${normalizedCommand.split(" ")[0]} bol pridaný do editora.`;
 }
 
 form.addEventListener("submit", handleSubmit);
@@ -233,64 +252,9 @@ form.addEventListener("submit", handleSubmit);
 document.querySelectorAll(".sample").forEach((button) => {
   button.addEventListener("click", () => loadSample(button.dataset.sample));
 });
-// handleSubmit je funkcia, ktorá sa spustí keď sa bude mať odoslať náš formulár
-function handleSubmit(e) {
-  if (e) e.preventDefault(); // zabrániť vstavenému odosielaniu v prehliadači
 
-  const form = document.querySelector("form");
-  const ves = document.querySelector("#mojEditor").value; // Načítame text z textarea
-  const width = document.querySelector("section:nth-child(2)").clientWidth; // Načítame aktuálnu šírku výstupného okna
-
-  const formular = new URLSearchParams(); // Vytvoríme štruktúru, ktorá bude reprezentovať formulár
-  formular.append('ves', ves); // Pridáme tam naše hodnoty
-  formular.append('width', width);
-
-  const url = form.action; // Nacitame povodnu URL zadanu vo formulari
-  const method = form.method; // Nacitame povodnu metodu zadanu vo formulari
-
-  fetch(url, { method: method, body: formular }) // Urobíme HTTP požiadavku na náš server POST /render
-    .then(async (res) => {
-      if (!res.ok) throw new Error(await res.text());
-      return res.blob();
-    })
-    .then((image) => {
-      document.querySelector("#output").src = URL.createObjectURL(image); // Nastavíme src našeho <img>
-    })
-    .catch((err) => {
-      console.error("Chyba pri generovaní:", err.message);
-    });
-}
-
-document.querySelector("form").addEventListener("submit", handleSubmit);
-
-// Znovuzrodená funkcia na vloženie textu do editora pri kliknutí na tlačidlá
-window.pridajText = function (obsah) {
-  const pole = document.getElementById('vesInput');
-  if (!pole) return;
-
-  var start = pole.selectionStart;
-  var koniec = pole.selectionEnd;
-  var staryText = pole.value;
-
-  // Vložíme text
-  pole.value = staryText.substring(0, start) + obsah + staryText.substring(koniec);
-
-  // Nastavíme kurzor
-  pole.focus();
-  pole.selectionStart = pole.selectionEnd = start + obsah.length;
-
-  // Spustí sa live preview
-  pole.dispatchEvent(new Event('input', { bubbles: true }));
-};
-
-// Automatické generovanie pri písaní (live preview s oneskorením)
-let timeout = null;
-textarea.addEventListener("input", function () {
-  clearTimeout(timeout);
-  timeout = setTimeout(() => {
-    handleSubmit();
-  }, 400); // 400ms po zastavení písania
+document.querySelectorAll(".command-chip").forEach((button) => {
+  button.addEventListener("click", () => {
+    insertCommand(button.dataset.command, button.dataset.description);
+  });
 });
-
-// Vygeneruje obrázok po prvom načítaní stránky
-setTimeout(() => handleSubmit(), 100);
