@@ -1,3 +1,13 @@
+:root {
+	--bg-primary: #121212;
+	--bg-secondary: #1e1e1e;
+	--bg-tertiary: #2d2d2d;
+	--text-primary: #ffffff;
+	--accent: #6366f1;
+	--accent-hover: #4f46e5;
+	--border: #333333;
+}
+
 * {
   box-sizing: border-box;
   margin: 0;
