@@ -1,8 +1,10 @@
 from io import BytesIO
+from pathlib import Path
 from flask import Flask, send_file, request, send_from_directory
 from ves import render_ves
 app = Flask(__name__)
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
+PUBLIC_DIR = Path(__file__).resolve().parent.parent / 'public'
 
 
 def serve_pil_image(img):
@@ -23,9 +25,9 @@ def index(path):
     Tato funkcia bude odpovedat na vsetky ostatne HTTP poziadavky, pre ktore nemame specialnu funkciu. Bude hladat subory v priecinku public.
   """
   if (len(path) == 0): # ak nezadany ziaden subor, teda cesta / chceme index.html
-    return send_from_directory('public', 'index.html')
+    return send_from_directory(PUBLIC_DIR, 'index.html')
 
-  return send_from_directory('public', path)
+  return send_from_directory(PUBLIC_DIR, path)
 
 
 @app.route('/render', methods=['post'])
@@ -33,9 +35,11 @@ def render():
   """
     Tato funkcia dostane v HTTP poziadavke zdrojovy kod pre VES a pozadovanu sirku, vyrenderuje obrazok a vrati ho ako HTTP odpoved
   """
-  ves = request.form.get('ves') # nacitanie hodnoty ktoru sme dostali v poziadavke
-  width = request.form.get('width') # nacitanie hodnoty ktoru sme dostali v poziadavke
-  print(ves)
-  # img = render_ves(ves, width) # tu posleme VES riadky do funkcie render_ves z projektu z prvého polroka
-  img = render_ves() 
+  ves = request.form.get('ves', '') # nacitanie hodnoty ktoru sme dostali v poziadavke
+  width = request.form.get('width', 640) # nacitanie hodnoty ktoru sme dostali v poziadavke
+  img = render_ves(ves, width)
   return serve_pil_image(img) # vratime vyrenderovany obrazok ako jpg
+
+
+if __name__ == '__main__':
+  app.run(debug=True)
