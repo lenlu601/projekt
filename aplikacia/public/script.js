@@ -1,171 +1,59 @@
-const SAMPLE_CONTENTS = {
-  vianoce: `VES v1.0 800 600
-CLEAR #001133
-
-# --- Mesiac a Hviezdy (Pozadie) ---
-FILL_CIRCLE 700 80 50 #FDFD96
-FILL_CIRCLE 720 90 10 #ECEC80
-FILL_CIRCLE 690 70 6 #ECEC80
-
-# Hviezdy
-FILL_CIRCLE 100 50 2 #FFFFFF
-FILL_CIRCLE 250 120 2 #FFFFFF
-FILL_CIRCLE 400 30 3 #FFFFFF
-FILL_CIRCLE 50 200 2 #FFFFFF
-FILL_CIRCLE 550 60 2 #FFFFFF
-FILL_CIRCLE 300 300 2 #FFFFFF
-FILL_CIRCLE 150 150 1 #FFFFFF
-
-# Sneh
-FILL_RECT 0 450 800 150 #F0F8FF
-
-# Domcek
-FILL_RECT 50 300 200 150 #8B0000
-RECT 50 300 200 150 3 #2F0000
-FILL_TRIANGLE 30 300 150 180 270 300 #333333
-TRIANGLE 30 300 150 180 270 300 3 #000000
-FILL_RECT 180 220 30 60 #552200
-RECT 180 220 30 60 2 #000000
-FILL_RECT 120 370 60 80 #654321
-RECT 120 370 60 80 2 #331100
-FILL_CIRCLE 170 410 4 #FFD700
-FILL_RECT 70 330 40 40 #FFFFE0
-RECT 70 330 40 40 3 #654321
-LINE 90 330 90 370 2 #654321
-LINE 70 350 110 350 2 #654321
-
-# Stromcek
-FILL_RECT 580 450 40 50 #3E2723
-FILL_TRIANGLE 480 450 720 450 600 300 #006400
-FILL_TRIANGLE 500 350 700 350 600 220 #008000
-FILL_TRIANGLE 530 250 670 250 600 150 #228B22
-FILL_TRIANGLE 600 130 585 160 615 160 #FFD700
-FILL_TRIANGLE 600 170 585 145 615 145 #FFD700
-FILL_CIRCLE 550 400 10 #FF0000
-FILL_CIRCLE 650 410 10 #0000FF
-FILL_CIRCLE 600 380 10 #FFD700
-FILL_CIRCLE 580 300 9 #800080
-FILL_CIRCLE 620 300 9 #FFA500
-FILL_CIRCLE 600 200 8 #FF0000
-LINE 530 380 600 400 3 #C0C0C0
-LINE 600 400 670 380 3 #C0C0C0
-LINE 550 280 600 300 3 #FFD700
-LINE 600 300 650 280 3 #FFD700
-
-# Snehuliak
-FILL_CIRCLE 350 480 45 #FAFAFA
-CIRCLE 350 480 45 1 #CCCCCC
-FILL_CIRCLE 350 420 35 #FAFAFA
-CIRCLE 350 420 35 1 #CCCCCC
-FILL_CIRCLE 350 370 25 #FAFAFA
-CIRCLE 350 370 25 1 #CCCCCC
-FILL_RECT 330 355 40 5 #000000
-FILL_RECT 335 325 30 30 #000000
-FILL_CIRCLE 342 365 3 #000000
-FILL_CIRCLE 358 365 3 #000000
-FILL_CIRCLE 350 410 3 #000000
-FILL_CIRCLE 350 430 3 #000000
-FILL_CIRCLE 350 480 3 #000000
-FILL_TRIANGLE 350 370 350 376 375 373 #FF8C00
-LINE 315 420 280 400 2 #5D4037
-LINE 385 420 420 400 2 #5D4037
-
-# Darcek
-FILL_RECT 680 480 50 50 #FF1493
-FILL_RECT 702 480 6 50 #FFFF00
-FILL_RECT 680 502 50 6 #FFFF00
-LINE 705 480 690 470 3 #FFFF00
-LINE 705 480 720 470 3 #FFFF00
-
-# Ram
-RECT 0 0 799 599 10 #FFFFFF`,
-  zatisie: `VES v1.0 800 600
-CLEAR #FCF7CF
-
-# Tapeta
-FILL_RECT 0 0 100 470 #F46058
-FILL_RECT 100 0 200 470 #F3A449
-FILL_RECT 200 0 300 470 #F46058
-FILL_RECT 300 0 400 470 #F3A449
-FILL_RECT 400 0 500 470 #F46058
-FILL_RECT 500 0 600 470 #F3A449
-FILL_RECT 600 0 700 470 #F46058
-FILL_RECT 700 0 800 470 #F3A449
-LINE 0 470 800 470 1 #000000
-LINE 0 485 800 485 1 #000000
-
-# Stol
-FILL_RECT 75 500 475 25 #A55022
-FILL_RECT 100 525 425 25 #A55022
-FILL_RECT 125 550 25 50 #A55022
-FILL_RECT 475 550 25 50 #A55022
-
-# Vaza a kvety
-FILL_RECT 150 375 75 125 #CA9FDF
-LINE 150 275 175 375 1 #2BB418
-LINE 188 275 188 375 1 #2BB418
-LINE 225 275 200 375 1 #2BB418
-FILL_TRIANGLE 138 263 162 263 150 275 #FF8914
-FILL_TRIANGLE 138 287 162 287 150 275 #FF8914
-FILL_TRIANGLE 138 263 138 287 150 275 #FFE214
-FILL_TRIANGLE 162 263 162 287 150 275 #FFE214
-FILL_CIRCLE 188 288 12 #3974DB
-FILL_CIRCLE 225 275 20 #DA31E3
-FILL_CIRCLE 225 275 13 #EBD128
-
-# Obraz
-FILL_RECT 375 400 75 100 #954B0E
-FILL_RECT 385 410 55 80 #FFFFFF
-CIRCLE 413 438 13 1 #000000
-FILL_CIRCLE 408 433 2 #000000
-FILL_CIRCLE 417 433 2 #000000
-LINE 410 443 415 443 1 #000000
-LINE 413 450 413 490 1 #000000
-LINE 413 460 400 475 1 #000000
-LINE 413 460 425 475 1 #000000
-
-# Zrkadlo
-FILL_CIRCLE 625 133 88 #FFD700
-FILL_CIRCLE 625 133 70 #9BC0D9
-FILL_TRIANGLE 600 100 625 75 650 175 #DEFCFA
-FILL_TRIANGLE 675 150 625 75 650 175 #DEFCFA
-FILL_TRIANGLE 575 125 585 110 625 200 #DEFCFA
-FILL_TRIANGLE 640 185 585 110 625 200 #DEFCFA`,
-  zralok: `VES v1.0 500 500
-CLEAR #0077BE
-
-# Zralok
-FILL_TRIANGLE 100 250 400 250 250 180 #708090
-FILL_TRIANGLE 100 250 400 250 250 320 #E0E0E0
-FILL_TRIANGLE 200 210 280 210 240 120 #708090
-FILL_TRIANGLE 100 250 40 180 100 220 #708090
-FILL_TRIANGLE 100 250 40 320 100 280 #708090
-FILL_TRIANGLE 260 270 320 270 290 330 #708090
-FILL_CIRCLE 360 235 5 #000000
-LINE 310 230 310 260 2 #2F4F4F
-LINE 315 230 315 260 2 #2F4F4F
-LINE 320 230 320 260 2 #2F4F4F
-LINE 350 270 400 250 2 #2F4F4F
-
-# Detaily
-CIRCLE 400 400 8 1 #FFFFFF
-CIRCLE 380 430 10 1 #FFFFFF
-CIRCLE 380 380 6 1 #FFFFFF
-CIRCLE 380 150 4 1 #ADD8E6
-CIRCLE 410 100 8 1 #B0E0E6
-
-# Dno
-FILL_RECT 0 450 500 50 #C2B280
-FILL_TRIANGLE 100 450 130 450 120 380 #2E8B57
-FILL_TRIANGLE 450 450 470 450 470 350 #228B22`
-};
-
 const form = document.querySelector("#renderForm");
 const textarea = document.querySelector("#vesInput");
 const outputImage = document.querySelector("#output");
 const statusMessage = document.querySelector("#statusMessage");
+const statusBadge = document.querySelector("#statusBadge");
 const commandHelp = document.querySelector("#commandHelp");
+const widthSlider = document.querySelector("#widthSlider");
+const widthInput = document.querySelector("#widthInput");
+const clearEditorButton = document.querySelector("#clearEditorButton");
+const imagePlaceholder = document.querySelector("#imagePlaceholder");
+
 let currentImageUrl = null;
+
+function isFileProtocol() {
+  return window.location.protocol === "file:";
+}
+
+function getBackendUrl(path) {
+  if (isFileProtocol()) {
+    return null;
+  }
+
+  return new URL(path, window.location.origin).toString();
+}
+
+function clampWidth(value) {
+  const parsed = Number.parseInt(value, 10);
+  if (Number.isNaN(parsed)) {
+    return 960;
+  }
+
+  return Math.min(1400, Math.max(240, parsed));
+}
+
+function syncWidthInputs(value) {
+  const normalized = clampWidth(value);
+  widthSlider.value = normalized;
+  widthInput.value = normalized;
+  return normalized;
+}
+
+function setStatus(state, message) {
+  statusBadge.className = `status-badge status-${state}`;
+  statusMessage.textContent = message;
+}
+
+function showPlaceholder() {
+  imagePlaceholder.hidden = false;
+  outputImage.style.display = "none";
+}
+
+function showRenderedImage(src) {
+  imagePlaceholder.hidden = true;
+  outputImage.src = src;
+  outputImage.style.display = "block";
+}
 
 async function handleSubmit(event) {
   if (event) {
@@ -174,82 +62,132 @@ async function handleSubmit(event) {
 
   const ves = textarea.value.trim();
   if (!ves) {
-    statusMessage.textContent = "Najprv vlož alebo vyber obsah VES súboru.";
-    outputImage.style.display = "none";
+    showPlaceholder();
+    setStatus("error", "Najprv vloz alebo nacitaj obsah VES suboru.");
     return;
   }
 
-  const previewWidth = Math.max(
-    Math.round(document.querySelector(".image-frame").clientWidth - 24),
-    200
-  );
-
+  const renderWidth = syncWidthInputs(widthInput.value);
   const formData = new URLSearchParams();
   formData.append("ves", ves);
-  formData.append("width", previewWidth);
+  formData.append("width", renderWidth);
+  const renderUrl = getBackendUrl(form.action || "/render");
 
-  statusMessage.textContent = "Renderujem obrázok...";
+  if (!renderUrl) {
+    showPlaceholder();
+    setStatus("error", "Frontend je otvoreny ako lokalny subor. Spusti `python gympel\\main.py` a otvor `http://127.0.0.1:5000`.");
+    return;
+  }
+
+  setStatus("loading", "Renderujem obrazok...");
 
   try {
-    const response = await fetch(form.action, {
+    const response = await fetch(renderUrl, {
       method: form.method,
       body: formData
     });
 
     if (!response.ok) {
       const message = await response.text();
-      throw new Error(message || "Nepodarilo sa vyrenderovať obrázok.");
+      throw new Error(message || "Renderer vratil chybu.");
     }
 
-    const image = await response.blob();
+    const imageBlob = await response.blob();
     if (currentImageUrl) {
       URL.revokeObjectURL(currentImageUrl);
     }
 
-    currentImageUrl = URL.createObjectURL(image);
-    outputImage.src = currentImageUrl;
-    outputImage.style.display = "block";
-    statusMessage.textContent = "Obrázok bol úspešne vyrenderovaný.";
+    currentImageUrl = URL.createObjectURL(imageBlob);
+    showRenderedImage(currentImageUrl);
+    setStatus("success", `Render hotovy. Siroky vystup: ${renderWidth}px.`);
   } catch (error) {
-    outputImage.style.display = "none";
-    statusMessage.textContent = error.message || "Nastala chyba pri renderovaní.";
+    showPlaceholder();
+    const fallbackMessage = isFileProtocol()
+      ? "Frontend je otvoreny bez backendu. Spusti `python gympel\\main.py` a pouzi `http://127.0.0.1:5000`."
+      : "Nastala chyba pri renderovani.";
+    setStatus("error", error.message || fallbackMessage);
   }
 }
 
-function loadSample(name) {
-  const sampleContent = SAMPLE_CONTENTS[name];
+async function loadSample(name) {
+  setStatus("loading", `Nacitavam vzorku ${name}...`);
+  const sampleUrl = getBackendUrl(`/sample/${name}`);
 
-  if (!sampleContent) {
-    statusMessage.textContent = "Táto ukážka neexistuje.";
+  if (!sampleUrl) {
+    setStatus("error", "Vzorky potrebuju Flask backend. Otvor aplikaciu cez `http://127.0.0.1:5000`.");
     return;
   }
 
-  textarea.value = sampleContent;
-  statusMessage.textContent = `Ukážka ${name.toUpperCase()} je načítaná.`;
-  handleSubmit();
+  try {
+    const response = await fetch(sampleUrl);
+    if (!response.ok) {
+      throw new Error("Vzorku sa nepodarilo nacitat.");
+    }
+
+    const sampleContent = await response.text();
+    textarea.value = sampleContent.trim();
+    setStatus("idle", `Vzorka ${name} je pripravena. Mozes ju renderovat alebo upravit.`);
+    await handleSubmit();
+  } catch (error) {
+    setStatus("error", error.message || "Vzorku sa nepodarilo nacitat.");
+  }
+}
+
+function insertAtCursor(text) {
+  const start = textarea.selectionStart ?? textarea.value.length;
+  const end = textarea.selectionEnd ?? textarea.value.length;
+  const prefix = textarea.value.slice(0, start);
+  const suffix = textarea.value.slice(end);
+  const needsNewlineBefore = prefix.length > 0 && !prefix.endsWith("\n");
+  const needsNewlineAfter = suffix.length > 0 && !suffix.startsWith("\n");
+  const inserted = `${needsNewlineBefore ? "\n" : ""}${text}${needsNewlineAfter ? "\n" : ""}`;
+
+  textarea.value = `${prefix}${inserted}${suffix}`;
+  const caret = prefix.length + inserted.length;
+  textarea.focus();
+  textarea.setSelectionRange(caret, caret);
 }
 
 function insertCommand(command, description) {
-  const normalizedCommand = command.trim();
-  const currentValue = textarea.value.trimEnd();
-  const nextValue = currentValue
-    ? `${currentValue}\n${normalizedCommand}`
-    : normalizedCommand;
-
-  textarea.value = nextValue;
-  textarea.focus();
-  textarea.setSelectionRange(textarea.value.length, textarea.value.length);
-
+  insertAtCursor(command.trim());
   if (description) {
     commandHelp.textContent = description;
   }
 
-  statusMessage.textContent = `Príkaz ${normalizedCommand.split(" ")[0]} bol pridaný do editora.`;
+  const operation = command.trim().split(" ")[0];
+  setStatus("idle", `Sablona ${operation} bola vlozena do editora.`);
+}
+
+function clearEditor() {
+  textarea.value = "";
+  if (currentImageUrl) {
+    URL.revokeObjectURL(currentImageUrl);
+    currentImageUrl = null;
+  }
+
+  outputImage.removeAttribute("src");
+  showPlaceholder();
+  setStatus("idle", "Editor je prazdny. Pridaj VES kod alebo nacitaj vzorku.");
+  textarea.focus();
 }
 
 form.addEventListener("submit", handleSubmit);
 
-document.querySelectorAll(".sample").forEach((button) => {
+widthSlider.addEventListener("input", (event) => {
+  syncWidthInputs(event.target.value);
+});
+
+widthInput.addEventListener("input", (event) => {
+  syncWidthInputs(event.target.value);
+});
+
+widthInput.addEventListener("blur", (event) => {
+  syncWidthInputs(event.target.value);
+});
+
+clearEditorButton.addEventListener("click", clearEditor);
+
+document.querySelectorAll(".sample-card").forEach((button) => {
   button.addEventListener("click", () => loadSample(button.dataset.sample));
 });
 
@@ -258,3 +196,13 @@ document.querySelectorAll(".command-chip").forEach((button) => {
     insertCommand(button.dataset.command, button.dataset.description);
   });
 });
+
+window.addEventListener("beforeunload", () => {
+  if (currentImageUrl) {
+    URL.revokeObjectURL(currentImageUrl);
+  }
+});
+
+showPlaceholder();
+syncWidthInputs(widthInput.value);
+setStatus("idle", "Nahraj vzorku alebo vlastny kod a spusti render.");

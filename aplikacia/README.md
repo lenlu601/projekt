@@ -20,6 +20,8 @@ C:\Users\rebek\venvs\aplikacia-rebeka_vzorky\Scripts\Activate.ps1
 python gympel\main.py
 ```
 
+Tento start ide bez Flask debug reloadera, aby render fungoval spolahlivo aj v in-app browseri.
+
 Ak to prostredie este neexistuje, vytvoris ho takto:
 
 ```powershell
@@ -32,6 +34,8 @@ Potom otvor v prehliadaci:
 ```text
 http://127.0.0.1:5000
 ```
+
+Neotvaraj `public/index.html` dvojklikom ako `file:///...`, pretoze render aj vzorky potrebuju bezat cez Flask backend a inak skoncis chybou `Failed to fetch`.
 
 ## Git workflow
 

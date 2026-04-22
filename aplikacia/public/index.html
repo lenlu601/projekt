@@ -3,91 +3,157 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>VES Renderer</title>
+  <title>VES Atelier</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <main class="layout">
-    <section class="editor-panel">
-      <div class="panel-card">
-        <h1>VES Renderer</h1>
-        <p class="intro">Vlož obsah `.ves` súboru, stlač tlačidlo a výsledný obrázok sa zobrazí vedľa.</p>
+  <div class="page-shell">
+    <header class="hero">
+      <div class="hero-copy">
+        <p class="eyebrow">VES playground</p>
+        <h1>Navrhni scenu, vyrenderuj ju a upravuj bez zdrzania.</h1>
+        <p class="hero-text">
+          Editor, prikazova legenda a preview su na jednej stranke, aby sa s formatom
+          `.ves` dalo pohodlne experimentovat aj pri prvom pouziti.
+        </p>
+      </div>
+      <div class="hero-card">
+        <p class="hero-card-label">Rychly start</p>
+        <ol>
+          <li>Vyber vzorku alebo vloz vlastny VES kod.</li>
+          <li>Nastav sirku vystupu.</li>
+          <li>Stlac render a skontroluj nahlad napravo.</li>
+        </ol>
+      </div>
+    </header>
 
-        <section class="command-legend" aria-labelledby="legendTitle">
-          <div class="legend-header">
-            <h2 id="legendTitle">Legenda príkazov</h2>
-            <p>Klikni na príkaz a jeho šablóna sa doplní do editora.</p>
+    <main class="layout">
+      <section class="editor-column">
+        <article class="panel glass-panel">
+          <div class="panel-heading">
+            <div>
+              <p class="section-label">Editor</p>
+              <h2>Zdrojovy VES kod</h2>
+            </div>
+            <div class="width-control">
+              <label for="widthInput">Sirka renderu</label>
+              <div class="width-inputs">
+                <input type="range" id="widthSlider" min="240" max="1400" step="20" value="960">
+                <input type="number" id="widthInput" min="240" max="1400" step="20" value="960">
+              </div>
+            </div>
           </div>
-          <div class="legend-grid">
-            <button type="button" class="command-chip" data-command="VES v1.0 800 600" data-description="Hlavička súboru s veľkosťou plátna.">
-              <strong>VES HEADER</strong>
+
+          <form id="renderForm" method="post" action="/render">
+            <label class="textarea-label" for="vesInput">Obsah .ves suboru</label>
+            <textarea
+              name="ves"
+              id="vesInput"
+              spellcheck="false"
+              placeholder="VES v1.0 800 600&#10;CLEAR #F7F4EA&#10;FILL_RECT 120 160 280 180 #E97A52"
+            ></textarea>
+            <div class="form-actions">
+              <button type="submit" class="primary-button">Renderovat obrazok</button>
+              <button type="button" id="clearEditorButton" class="secondary-button">Vycistit editor</button>
+            </div>
+          </form>
+        </article>
+
+        <article class="panel solid-panel">
+          <div class="panel-heading compact">
+            <div>
+              <p class="section-label">Prikazy</p>
+              <h2>Legenda a sablony</h2>
+            </div>
+            <p id="commandHelp" class="muted-text">Kliknutim vlozis sablonu do editora na aktualnu poziciu.</p>
+          </div>
+          <div class="chip-grid">
+            <button type="button" class="command-chip" data-command="VES v1.0 800 600" data-description="Povinna hlavicka suboru s rozmerom platna.">
+              <strong>HEADER</strong>
               <span>VES v1.0 800 600</span>
             </button>
-            <button type="button" class="command-chip" data-command="CLEAR #FFFFFF" data-description="Vyplní celé plátno jednou farbou.">
+            <button type="button" class="command-chip" data-command="CLEAR #F6F1E8" data-description="Vyplni cele platno jednou farbou.">
               <strong>CLEAR</strong>
-              <span>CLEAR #FFFFFF</span>
+              <span>CLEAR #F6F1E8</span>
             </button>
-            <button type="button" class="command-chip" data-command="FILL_RECT 50 50 200 120 #FF8800" data-description="Vyplnený obdĺžnik.">
-              <strong>RECTANGLE</strong>
-              <span>FILL_RECT 50 50 200 120 #FF8800</span>
+            <button type="button" class="command-chip" data-command="FILL_RECT 80 120 260 140 #E97A52" data-description="Vyplneny obdlznik.">
+              <strong>FILL_RECT</strong>
+              <span>FILL_RECT 80 120 260 140 #E97A52</span>
             </button>
-            <button type="button" class="command-chip" data-command="RECT 50 50 200 120 3 #222222" data-description="Obrys obdĺžnika.">
+            <button type="button" class="command-chip" data-command="RECT 80 120 260 140 4 #172033" data-description="Obrys obdlznika s hrubkou.">
               <strong>RECT</strong>
-              <span>RECT 50 50 200 120 3 #222222</span>
+              <span>RECT 80 120 260 140 4 #172033</span>
             </button>
-            <button type="button" class="command-chip" data-command="FILL_CIRCLE 200 200 60 #00AAFF" data-description="Vyplnený kruh.">
-              <strong>FILL CIRCLE</strong>
-              <span>FILL_CIRCLE 200 200 60 #00AAFF</span>
+            <button type="button" class="command-chip" data-command="FILL_CIRCLE 300 200 60 #2D9CDB" data-description="Vyplneny kruh.">
+              <strong>FILL_CIRCLE</strong>
+              <span>FILL_CIRCLE 300 200 60 #2D9CDB</span>
             </button>
-            <button type="button" class="command-chip" data-command="CIRCLE 200 200 60 3 #003366" data-description="Obrys kruhu.">
+            <button type="button" class="command-chip" data-command="CIRCLE 300 200 60 4 #0B3954" data-description="Kruh len s obrysom.">
               <strong>CIRCLE</strong>
-              <span>CIRCLE 200 200 60 3 #003366</span>
+              <span>CIRCLE 300 200 60 4 #0B3954</span>
             </button>
-            <button type="button" class="command-chip" data-command="FILL_TRIANGLE 100 300 220 120 340 300 #66CC66" data-description="Vyplnený trojuholník.">
-              <strong>FILL TRIANGLE</strong>
-              <span>FILL_TRIANGLE 100 300 220 120 340 300 #66CC66</span>
+            <button type="button" class="command-chip" data-command="FILL_TRIANGLE 120 320 260 160 400 320 #7BC96F" data-description="Vyplneny trojuholnik.">
+              <strong>FILL_TRIANGLE</strong>
+              <span>FILL_TRIANGLE 120 320 260 160 400 320 #7BC96F</span>
             </button>
-            <button type="button" class="command-chip" data-command="TRIANGLE 100 300 220 120 340 300 3 #225522" data-description="Obrys trojuholníka.">
+            <button type="button" class="command-chip" data-command="TRIANGLE 120 320 260 160 400 320 4 #1F5133" data-description="Obrys trojuholnika s hrubkou.">
               <strong>TRIANGLE</strong>
-              <span>TRIANGLE 100 300 220 120 340 300 3 #225522</span>
+              <span>TRIANGLE 120 320 260 160 400 320 4 #1F5133</span>
             </button>
-            <button type="button" class="command-chip" data-command="LINE 40 40 300 180 3 #111111" data-description="Čiara medzi dvoma bodmi.">
+            <button type="button" class="command-chip" data-command="LINE 60 60 360 220 4 #172033" data-description="Ciara medzi dvoma bodmi.">
               <strong>LINE</strong>
-              <span>LINE 40 40 300 180 3 #111111</span>
+              <span>LINE 60 60 360 220 4 #172033</span>
             </button>
           </div>
-          <p id="commandHelp" class="legend-help">Vyber príkaz a doplnia sa jeho argumenty.</p>
-        </section>
+        </article>
+      </section>
 
-        <form id="renderForm" method="POST" action="/render">
-          <label for="vesInput">Obsah VES súboru</label>
-          <textarea name="ves" id="vesInput" placeholder="Sem vlož obsah .ves súboru"></textarea>
-          <button type="submit">Zobraziť obrázok</button>
-        </form>
-      </div>
-    </section>
+      <section class="preview-column">
+        <article class="panel preview-panel">
+          <div class="panel-heading compact">
+            <div>
+              <p class="section-label">Preview</p>
+              <h2>Vysledny obrazok</h2>
+            </div>
+            <span id="statusBadge" class="status-badge status-idle">Pripraveny</span>
+          </div>
+          <p id="statusMessage" class="muted-text">Nahraj vzorku alebo vlastny kod a spusti render.</p>
 
-    <section class="preview-panel">
-      <div class="panel-card preview-card">
-        <div class="preview-header">
-          <h2>Výsledok</h2>
-          <p id="statusMessage">Zatiaľ nie je zobrazený žiadny obrázok.</p>
-        </div>
-        <div class="image-frame">
-          <img id="output" alt="Vyrenderovaný VES obrázok">
-        </div>
-      </div>
-    </section>
+          <div class="image-frame" id="imageFrame">
+            <div class="image-placeholder" id="imagePlaceholder">
+              <p>Preview sa zobrazi tu.</p>
+              <span>Renderer pouziva backend vo Flasku a vracia PNG vystup.</span>
+            </div>
+            <img id="output" alt="Vyrenderovany VES obrazok">
+          </div>
+        </article>
 
-    <aside class="samples-panel">
-      <div class="panel-card">
-        <h2>Skúste si tieto obrázky:</h2>
-        <button type="button" class="sample" data-sample="vianoce">VIANOCE</button>
-        <button type="button" class="sample" data-sample="zatisie">ZÁTIŠIE</button>
-        <button type="button" class="sample" data-sample="zralok">ŽRALOK</button>
-      </div>
-    </aside>
-  </main>
+        <article class="panel solid-panel samples-panel">
+          <div class="panel-heading compact">
+            <div>
+              <p class="section-label">Vzorky</p>
+              <h2>Otvor hotove sceny</h2>
+            </div>
+            <p class="muted-text">Vzorky sa nacitavaju priamo z priecinka `public/samples`.</p>
+          </div>
+          <div class="sample-grid">
+            <button type="button" class="sample-card" data-sample="vianoce">
+              <strong>Vianoce</strong>
+              <span>Nocna scena s domcekom, stromcekom a snehuliakom.</span>
+            </button>
+            <button type="button" class="sample-card" data-sample="zatisie">
+              <strong>Zatisie</strong>
+              <span>Interier s vazou, obrazom a zrkadlom.</span>
+            </button>
+            <button type="button" class="sample-card" data-sample="zralok">
+              <strong>Zralok</strong>
+              <span>Morska scena s jednoduchymi tvarmi a detailmi.</span>
+            </button>
+          </div>
+        </article>
+      </section>
+    </main>
+  </div>
 
   <script src="script.js"></script>
 </body>
