@@ -11,6 +11,18 @@ const imagePlaceholder = document.querySelector("#imagePlaceholder");
 
 let currentImageUrl = null;
 
+function isFileProtocol() {
+  return window.location.protocol === "file:";
+}
+
+function getBackendUrl(path) {
+  if (isFileProtocol()) {
+    return null;
+  }
+
+  return new URL(path, window.location.origin).toString();
+}
+
 function clampWidth(value) {
   const parsed = Number.parseInt(value, 10);
   if (Number.isNaN(parsed)) {
@@ -59,11 +71,18 @@ async function handleSubmit(event) {
   const formData = new URLSearchParams();
   formData.append("ves", ves);
   formData.append("width", renderWidth);
+  const renderUrl = getBackendUrl(form.action || "/render");
+
+  if (!renderUrl) {
+    showPlaceholder();
+    setStatus("error", "Frontend je otvoreny ako lokalny subor. Spusti `python gympel\\main.py` a otvor `http://127.0.0.1:5000`.");
+    return;
+  }
 
   setStatus("loading", "Renderujem obrazok...");
 
   try {
-    const response = await fetch(form.action, {
+    const response = await fetch(renderUrl, {
       method: form.method,
       body: formData
     });
@@ -83,15 +102,24 @@ async function handleSubmit(event) {
     setStatus("success", `Render hotovy. Siroky vystup: ${renderWidth}px.`);
   } catch (error) {
     showPlaceholder();
-    setStatus("error", error.message || "Nastala chyba pri renderovani.");
+    const fallbackMessage = isFileProtocol()
+      ? "Frontend je otvoreny bez backendu. Spusti `python gympel\\main.py` a pouzi `http://127.0.0.1:5000`."
+      : "Nastala chyba pri renderovani.";
+    setStatus("error", error.message || fallbackMessage);
   }
 }
 
 async function loadSample(name) {
   setStatus("loading", `Nacitavam vzorku ${name}...`);
+  const sampleUrl = getBackendUrl(`/sample/${name}`);
+
+  if (!sampleUrl) {
+    setStatus("error", "Vzorky potrebuju Flask backend. Otvor aplikaciu cez `http://127.0.0.1:5000`.");
+    return;
+  }
 
   try {
-    const response = await fetch(`/sample/${name}`);
+    const response = await fetch(sampleUrl);
     if (!response.ok) {
       throw new Error("Vzorku sa nepodarilo nacitat.");
     }

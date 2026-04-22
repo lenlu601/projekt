@@ -33,6 +33,8 @@ Potom otvor v prehliadaci:
 http://127.0.0.1:5000
 ```
 
+Neotvaraj `public/index.html` dvojklikom ako `file:///...`, pretoze render aj vzorky potrebuju bezat cez Flask backend a inak skoncis chybou `Failed to fetch`.
+
 ## Git workflow
 
 Ak chces poslat zmeny spoluziakom:
